@@ -41,7 +41,7 @@ public class RegisterUserController {
         }
         // メールアドレスが既に登録されている場合エラー
         if (registerUserService.findUserByEmail(form.getEmail()) != null) {
-            result.rejectValue("mailAddress", "", "！そのメールアドレスは既に登録されています！");
+            result.rejectValue("email", "", "！そのメールアドレスは既に登録されています！");
         }
         // エラーがあれば入力画面に戻す
         if (result.hasErrors()) {
@@ -52,6 +52,6 @@ public class RegisterUserController {
         BeanUtils.copyProperties(form, user);
         registerUserService.registerUser(user);
 
-        return "redirect:/";
+        return "redirect:/toLogin";
     }
 }

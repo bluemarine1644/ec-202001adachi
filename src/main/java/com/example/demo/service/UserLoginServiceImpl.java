@@ -21,7 +21,7 @@ import com.example.demo.repository.UserRepository;
  * @author sota_adachi
  */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserLoginServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
