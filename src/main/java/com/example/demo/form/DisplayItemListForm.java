@@ -37,4 +37,8 @@ public class DisplayItemListForm {
      * 削除コード
      */
     private boolean deleted;
+    /**
+     * 並び替え
+     */
+    private Integer sortValue;
 }

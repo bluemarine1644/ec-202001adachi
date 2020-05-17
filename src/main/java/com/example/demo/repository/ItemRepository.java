@@ -1,11 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
@@ -17,37 +16,39 @@ import java.util.List;
  * @author sota_adachi
  */
 @Repository
-public class ItemRepository {
-    @Autowired
-    private NamedParameterJdbcTemplate template;
+@Mapper
+public interface ItemRepository {
     /**
-     * itemsテーブルを操作するローマッパー.
-     */
-    private static final RowMapper<Item> ITEM_ROW_MAPPER = (rs, i) -> {
-        Item item = new Item();
-        item.setId(rs.getInt("id"));
-        item.setName(rs.getString("name"));
-        item.setDescription(rs.getString("description"));
-        item.setPriceM(rs.getInt("price_m"));
-        item.setPriceL(rs.getInt("price_l"));
-        item.setImagePath(rs.getString("image_path"));
-        item.setDeleted(rs.getBoolean("deleted"));
-        return item;
-    };
-
-    /**
-     * 商品を名前順で（曖昧）検索します.
+     * 商品一覧情報を検索します.
      *
      * @param name 商品名
+     * @param sort 並び替え
      * @return 商品一覧情報
      */
-    public List<Item> selectItems(String name) {
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ";
-        if (!StringUtils.isEmpty(name)) {
-            sql += "WHERE (name) LIKE :name ";
+    @SelectProvider(type = ItemSqlProvider.class, method = "selectItemList")
+    List<Item> selectItemList(String name, String sort, String turn);
+
+    /**
+     * 商品情報を検索します.
+     *
+     * @param id 商品ID
+     * @return 商品情報
+     */
+    @Select("SELECT * FROM items WHERE id = #{id}")
+    Item loadItem(Integer id);
+
+    class ItemSqlProvider {
+
+        public String selectItemList(String name, String sort, String turn) {
+            System.out.println("sort[" + sort + "], turn[" + turn + "]");
+            return new SQL() {{
+                SELECT("*");
+                FROM("items");
+                if (!StringUtils.isEmpty(name)) {
+                    WHERE("(name) LIKE #{name}");
+                }
+                ORDER_BY("${sort} ${turn}");
+            }}.toString();
         }
-        sql += "ORDER BY name";
-        SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
-        return template.query(sql, param, ITEM_ROW_MAPPER);
     }
 }
