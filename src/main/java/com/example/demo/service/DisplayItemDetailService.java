@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Item;
 import com.example.demo.domain.Topping;
-import com.example.demo.repository.ItemRepository;
-import com.example.demo.repository.ToppingRepository;
+import com.example.demo.repository.ItemMapper;
+import com.example.demo.repository.ToppingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +17,15 @@ import java.util.List;
 @Service
 public class DisplayItemDetailService {
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemMapper itemMapper;
     @Autowired
-    private ToppingRepository toppingRepository;
+    private ToppingMapper toppingMapper;
 
     public Item displayItem(Integer id) {
-        return itemRepository.loadItem(id);
+        return itemMapper.loadByItemId(id);
     }
 
     public List<Topping> displayItemDetail() {
-        return toppingRepository.select();
+        return toppingMapper.select();
     }
 }

@@ -6,16 +6,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * ユーザを登録するフォーム.
+ * ユーザを登録する際に使用するフォーム.
  *
  * @author sota_adachi
  */
 @Data
 public class RegisterUserForm {
-    /**
-     * id
-     */
-    private Integer id;
     /**
      * 登録ユーザ名
      */
@@ -25,7 +21,7 @@ public class RegisterUserForm {
      * メールアドレス
      */
     @Email(message = "！形式が不正です！")
-    @NotBlank(message = "！メールアドレスが入力されていません！")
+    @NotBlank(message = "！メnameールアドレスが入力されていません！")
     private String email;
     /**
      * パスワード
@@ -43,7 +39,7 @@ public class RegisterUserForm {
     @NotBlank(message = "！郵便番号が入力されていません！")
     private String zipcode;
     /**
-     * 住所（都道府県以降）
+     * 住所
      */
     @NotBlank(message = "！住所が入力されていません！")
     private String address;

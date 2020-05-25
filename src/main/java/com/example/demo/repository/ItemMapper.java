@@ -5,19 +5,17 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.jdbc.SQL;
-import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
 /**
- * itemsテーブルを操作するリポジトリ.
+ * itemsテーブルを操作するマッパー.
  *
  * @author sota_adachi
  */
-@Repository
 @Mapper
-public interface ItemRepository {
+public interface ItemMapper {
     /**
      * 商品一覧情報を検索します.
      *
@@ -25,8 +23,8 @@ public interface ItemRepository {
      * @param sort 並び替え
      * @return 商品一覧情報
      */
-    @SelectProvider(type = ItemSqlProvider.class, method = "selectItemList")
-    List<Item> selectItemList(String name, String sort, String turn);
+    @SelectProvider(type = ItemSqlProvider.class, method = "findByItemNameAndSortAndTurn")
+    List<Item> findByItemNameAndSortAndTurn(String name, String sort, String turn);
 
     /**
      * 商品情報を検索します.
@@ -35,12 +33,10 @@ public interface ItemRepository {
      * @return 商品情報
      */
     @Select("SELECT * FROM items WHERE id = #{id}")
-    Item loadItem(Integer id);
+    Item loadByItemId(Integer id);
 
     class ItemSqlProvider {
-
-        public String selectItemList(String name, String sort, String turn) {
-            System.out.println("sort[" + sort + "], turn[" + turn + "]");
+        public String findByItemNameAndSortAndTurn(String name, String sort, String turn) {
             return new SQL() {{
                 SELECT("*");
                 FROM("items");

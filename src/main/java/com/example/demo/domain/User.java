@@ -10,11 +10,11 @@ import lombok.Data;
 @Data
 public class User {
     /**
-     * id
+     * ID
      */
     private Integer id;
     /**
-     * 登録ユーザ名
+     * 登録名
      */
     private String name;
     /**

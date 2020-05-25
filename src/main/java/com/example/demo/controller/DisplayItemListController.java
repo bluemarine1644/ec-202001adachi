@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Item;
+import com.example.demo.domain.LoginUser;
 import com.example.demo.form.DisplayItemListForm;
 import com.example.demo.service.DisplayItemListService;
-import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,7 +42,14 @@ public class DisplayItemListController {
      * @return 商品一覧画面
      */
     @RequestMapping("/")
-    public String displayItemList(Model model, Integer page, DisplayItemListForm form) {
+    public String displayItemList(@AuthenticationPrincipal LoginUser user, Model model, Integer page, DisplayItemListForm form) {
+        String userName;
+        try {
+            userName = user.getUser().getName();
+        } catch (NullPointerException exception) {
+            userName = "ゲスト";
+        }
+        model.addAttribute("userName", userName);
         // ページング機能追加
         if (page == null) {
             // 初期値を1ページ目にする
@@ -50,14 +58,14 @@ public class DisplayItemListController {
         String sort = null;
         String turn = null;
         try {
-            if (form.getSortValue() == 1) {
+            if (form.getSort() == 1) {
                 sort = "price_m";
                 turn = "ASC";
-            } else if (form.getSortValue() == 2) {
+            } else if (form.getSort() == 2) {
                 sort = "price_m";
                 turn = "DESC";
             }
-        } catch (Exception e) {
+        } catch (NullPointerException exception) {
             sort = "id";
             turn = "ASC";
         }

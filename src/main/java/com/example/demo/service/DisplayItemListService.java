@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Item;
-import com.example.demo.repository.ItemRepository;
+import com.example.demo.repository.ItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +22,7 @@ import java.util.List;
 public class DisplayItemListService {
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemMapper itemMapper;
 
     /**
      * 商品一覧を表示します.
@@ -31,7 +31,7 @@ public class DisplayItemListService {
      * @return 商品一覧情報
      */
     public List<Item> displayItemList(String name, String sort, String turn) {
-        return itemRepository.selectItemList(name, sort, turn);
+        return itemMapper.findByItemNameAndSortAndTurn(name, sort, turn);
     }
 
     /**
@@ -43,7 +43,6 @@ public class DisplayItemListService {
      * @return 1ページに表示されるサイズ分の商品一覧情報
      */
     public Page<Item> displayListPaging(Integer page, Integer size, List<Item> itemList) {
-
         // 表示させたいページ数を-1しなければうまく動かない
         page--;
 
@@ -84,7 +83,7 @@ public class DisplayItemListService {
             }
             Item item = itemList.get(i);
             itemListForAutocomplete.append("\"");
-            itemListForAutocomplete.append(item.getName());
+            itemListForAutocomplete.append(item.getId());
             itemListForAutocomplete.append("\"");
         }
         return itemListForAutocomplete;

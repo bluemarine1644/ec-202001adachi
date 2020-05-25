@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 商品情報を表すドメイン.
  *
@@ -37,4 +39,8 @@ public class Item {
      * 削除コード
      */
     private boolean deleted;
+    /**
+     * トッピングリスト
+     */
+    private List<Topping> toppingList;
 }

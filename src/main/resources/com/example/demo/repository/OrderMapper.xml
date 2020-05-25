@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.OrderMapper">
+    <select id="findByStatusAndUserId" resultMap="orderMap">
+        SELECT
+            o.id,
+            user_id,
+            status,
+            total_price,
+            order_date,
+            destination_name,
+            destination_email,
+            destination_zipcode,
+            destination_address,
+            destination_tel,
+            delivery_time,
+            payment_method,
+            oi.id order_item_id,
+            quantity,
+            size,
+            i.id AS item_id,
+            i.name AS item_name,
+            description,
+            i.price_m AS item_price_m,
+            i.price_l AS item_price_l,
+            image_path,
+            deleted,
+            t.id AS topping_id,
+            t.name AS topping_name,
+            t.price_m AS topping_price_m,
+            t.price_l AS topping_price_l
+        FROM orders o
+            LEFT JOIN order_items oi ON o.id = oi.order_id
+            LEFT JOIN items i ON oi.item_id = i.id
+            LEFT JOIN order_toppings ot ON oi.id = ot.order_item_id
+            LEFT JOIN toppings t ON ot.topping_id = t.id
+        WHERE status = #{status} AND user_id = #{userId}
+        ORDER BY o.id
+    </select>
+    <resultMap autoMapping="true" id="orderMap" type="com.example.demo.domain.Order">
+        <id column="id" property="id"/>
+        <collection autoMapping="true" ofType="com.example.demo.domain.OrderItem" property="orderItemList">
+            <id column="order_item_id" property="id"/>
+            <association property="item" resultMap="itemMap"/>
+            <collection autoMapping="true" ofType="com.example.demo.domain.OrderTopping" property="orderToppingList">
+                <id column="order_topping_id" property="id"/>
+                <association property="topping" resultMap="toppingMap"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <resultMap autoMapping="true" id="itemMap" type="com.example.demo.domain.Item">
+        <id column="item_id" property="id"/>
+        <result column="item_name" property="name"/>
+        <result column="item_price_m" property="priceM"/>
+        <result column="item_price_l" property="priceL"/>
+    </resultMap>
+    <resultMap autoMapping="true" id="toppingMap" type="com.example.demo.domain.Topping">
+        <id column="topping_id" property="id"/>
+        <result column="topping_name" property="name"/>
+        <result column="topping_price_m" property="priceM"/>
+        <result column="topping_price_l" property="priceL"/>
+    </resultMap>
+</mapper>

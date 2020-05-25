@@ -7,12 +7,12 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * toppingsテーブルを操作するリポジトリ.
+ * toppingsテーブルを操作するマッパー.
  *
  * @author sota_adachi
  */
 @Mapper
-public interface ToppingRepository {
+public interface ToppingMapper {
     /**
      * トッピング情報を検索します.
      *
