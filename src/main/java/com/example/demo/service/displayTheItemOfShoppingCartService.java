@@ -29,12 +29,12 @@ public class displayTheItemOfShoppingCartService {
      * @param userId ユーザID
      * @return 注文前の注文情報
      */
-    public List<Order> displayTheItemOfShoppingCart(Integer status, Integer userId) {
+    public Order displayTheItemOfShoppingCart(Integer status, Integer userId) {
         // 小計を計算してリストに格納する
-        List<Order> orderList = orderMapper.findByStatusAndUserId(status, userId);
+        Order order = orderMapper.findByStatusAndUserId(status, userId);
         List<OrderItem> orderItemList;
         try {
-            orderItemList = orderList.get(0).getOrderItemList();
+            orderItemList = order.getOrderItemList();
         } catch (IndexOutOfBoundsException exception) {
             return null;
         }
@@ -50,6 +50,6 @@ public class displayTheItemOfShoppingCartService {
             }
             orderItem.setSubTotal((itemPrice + toppingPrice) * orderItem.getQuantity());
         }
-        return orderList;
+        return order;
     }
 }

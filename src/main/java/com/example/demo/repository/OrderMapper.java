@@ -3,8 +3,6 @@ package com.example.demo.repository;
 import com.example.demo.domain.Order;
 import org.apache.ibatis.annotations.*;
 
-import java.util.List;
-
 /**
  * ordersテーブルを操作するマッパー.
  *
@@ -27,7 +25,7 @@ public interface OrderMapper {
      * @param userId ユーザID
      * @return 注文情報
      */
-    List<Order> findByStatusAndUserId(@Param("status") Integer status, @Param("userId") Integer userId);
+    Order findByStatusAndUserId(@Param("status") Integer status, @Param("userId") Integer userId);
 
     /**
      * 注文情報を更新します.

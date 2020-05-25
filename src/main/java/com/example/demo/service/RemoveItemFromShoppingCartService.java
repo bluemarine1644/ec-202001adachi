@@ -41,7 +41,7 @@ public class RemoveItemFromShoppingCartService {
             userId = session.getId().hashCode();
         }
         orderItemMapper.delete(orderItemId);
-        Order order = orderMapper.findByStatusAndUserId(status, userId).get(0);
+        Order order = orderMapper.findByStatusAndUserId(status, userId);
         order.setTotalPrice(totalPrice - subTotal);
         orderMapper.updateTotalPriceByUserIdAndStatus(order);
     }

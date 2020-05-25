@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * ショッピングカートに商品を追加するサービス.
@@ -44,9 +43,8 @@ public class AddItemToShoppingCartService {
         // ordersテーブルからログイン中のユーザID(ゲストの場合はセッションIDをハッシュ化)を元に注文前(status = 0)のデータを検索する
         Integer status = 0;
         Integer totalPrice = 0;
-        List<Order> orderList = orderMapper.findByStatusAndUserId(status, userId);
-        Order order;
-        if (orderList.size() == 0) {
+        Order order = orderMapper.findByStatusAndUserId(status, userId);
+        if (Objects.isNull(order)) {
             // 他に注文前の商品がない場合はユーザID、注文状況（注文前）、合計金額（NotNull制約があるため）をセットする
             order = new Order();
             order.setUserId(userId);
@@ -56,7 +54,6 @@ public class AddItemToShoppingCartService {
             orderMapper.insert(order);
         } else {
             // 他に注文前の商品がある場合は合計金額を取得する
-            order = orderList.get(0);
             totalPrice = order.getTotalPrice();
         }
 

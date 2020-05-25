@@ -42,10 +42,10 @@ public class displayTheItemOfShoppingCartController {
             userId = session.getId().hashCode();
         }
         try {
-            Order order = displayTheItemOfShoppingCartService.displayTheItemOfShoppingCart(status, userId).get(0);
-            Integer orderItemSize = order.getOrderItemList().size();
+            Order order = displayTheItemOfShoppingCartService.displayTheItemOfShoppingCart(status, userId);
+            Integer orderItemListSize = order.getOrderItemList().size();
             model.addAttribute("order", order);
-            model.addAttribute("orderItemSize", orderItemSize);
+            model.addAttribute("orderItemListSize", orderItemListSize);
         } catch (NullPointerException exception) {
             model.addAttribute("orderItemSize", 0);
         }
